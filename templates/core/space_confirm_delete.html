@@ -1,0 +1,13 @@
+﻿{% extends 'core/base.html' %}
+{% block title %}Excluir Espaço – Mapas Culturais{% endblock %}
+
+{% block content %}
+  <h2>Confirma exclusão?</h2>
+  <p>Deseja realmente excluir o espaço “<strong>{{ space.name }}</strong>”?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Sim, excluir</button>
+    <a href="{% url 'space_list' %}">Cancelar</a>
+  </form>
+{% endblock %}
+  

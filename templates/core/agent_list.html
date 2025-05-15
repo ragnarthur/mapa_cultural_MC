@@ -1,0 +1,18 @@
+﻿{% extends 'core/base.html' %}
+{% block title %}Agentes – Mapas Culturais{% endblock %}
+
+{% block content %}
+  <h2>Lista de Agentes</h2>
+  <p><a href="{% url 'agent_create' %}">+ Adicionar Agente</a></p>
+  <ul>
+    {% for a in agents %}
+      <li>
+        {{ a.name }}{% if a.email %} – {{ a.email }}{% endif %} —
+        <a href="{% url 'agent_update' a.pk %}">Editar</a> |
+        <a href="{% url 'agent_delete' a.pk %}">Excluir</a>
+      </li>
+    {% empty %}
+      <li>Nenhum agente cadastrado.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,77 @@
+﻿{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ action }} Agente Cultural{% endblock %}
+
+{% block content %}
+<section class="agent-form container">
+  <h2>{{ action }} Agente Cultural</h2>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="form-group">
+      {{ form.name.label_tag }}
+      {{ form.name }}
+      {% if form.name.help_text %}
+        <small class="help-text">{{ form.name.help_text }}</small>
+      {% endif %}
+      {{ form.name.errors }}
+    </div>
+
+    <div class="form-group">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+      {% if form.email.help_text %}
+        <small class="help-text">{{ form.email.help_text }}</small>
+      {% endif %}
+      {{ form.email.errors }}
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+      {{ form.area_of_activity.label_tag }}
+      {{ form.area_of_activity }}
+      {% if form.area_of_activity.help_text %}
+        <small class="help-text">{{ form.area_of_activity.help_text }}</small>
+      {% endif %}
+      {{ form.area_of_activity.errors }}
+    </div>
+
+    <div class="form-group">
+      {{ form.education.label_tag }}
+      {{ form.education }}
+      {% if form.education.help_text %}
+        <small class="help-text">{{ form.education.help_text }}</small>
+      {% endif %}
+      {{ form.education.errors }}
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+      {{ form.bio.label_tag }}
+      {{ form.bio }}
+      {% if form.bio.help_text %}
+        <small class="help-text">{{ form.bio.help_text }}</small>
+      {% endif %}
+      {{ form.bio.errors }}
+    </div>
+
+    <div class="form-group">
+      {{ form.contact.label_tag }}
+      {{ form.contact }}
+      {% if form.contact.help_text %}
+        <small class="help-text">{{ form.contact.help_text }}</small>
+      {% endif %}
+      {{ form.contact.errors }}
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">{{ action }}</button>
+      <a href="{% url 'agent_list' %}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

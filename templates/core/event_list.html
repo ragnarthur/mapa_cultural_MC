@@ -1,0 +1,20 @@
+﻿{% extends 'core/base.html' %}
+
+{% block title %}Eventos – Mapas Culturais{% endblock %}
+
+{% block content %}
+  <h2>Lista de Eventos</h2>
+  <p><a href="{% url 'event_create' %}">+ Adicionar Evento</a></p>
+  <ul>
+    {% for e in events %}
+      <li>
+        <strong>{{ e.title }}</strong><br>
+        {{ e.start|date:"d/m/Y H:i" }} — {{ e.end|date:"d/m/Y H:i" }}<br>
+        <a href="{% url 'event_update' e.pk %}">Editar</a> |
+        <a href="{% url 'event_delete' e.pk %}">Excluir</a>
+      </li>
+    {% empty %}
+      <li>Nenhum evento cadastrado.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

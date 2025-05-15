@@ -1,0 +1,16 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Ambiente virtual
+venv/
+.mapas_culturais_env/
+.env
+
+# Django
+*.log
+db.sqlite3
+
+# Arquivos do sistema
+.DS_Store
