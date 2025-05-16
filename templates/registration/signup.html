@@ -1,40 +1,30 @@
 ﻿{% extends 'core/base.html' %}
-
 {% block title %}Registrar-se – Mapas Culturais{% endblock %}
 
 {% block content %}
   <h2>Cadastro de Agente Cultural</h2>
-  <form method="post">
-    {% csrf_token %}
+  <form method="post">{% csrf_token %}
     {{ form.non_field_errors }}
-    <div class="form-group">
-      {{ form.username.label_tag }}
-      {{ form.username }}
-      {{ form.username.errors }}
+    <div>
+      {{ form.username.label_tag }}<br>
+      {{ form.username }}<br>{{ form.username.errors }}
     </div>
-    <div class="form-group">
-      {{ form.name.label_tag }}
-      {{ form.name }}
-      {{ form.name.errors }}
+    <div>
+      {{ form.name.label_tag }}<br>
+      {{ form.name }}<br>{{ form.name.errors }}
     </div>
-    <div class="form-group">
-      {{ form.email.label_tag }}
-      {{ form.email }}
-      {{ form.email.errors }}
+    <div>
+      {{ form.email.label_tag }}<br>
+      {{ form.email }}<br>{{ form.email.errors }}
     </div>
-    <div class="form-group">
-      {{ form.password1.label_tag }}
-      {{ form.password1 }}
-      {{ form.password1.errors }}
+    <div>
+      {{ form.password1.label_tag }}<br>
+      {{ form.password1 }}<br>{{ form.password1.errors }}
     </div>
-    <div class="form-group">
-      {{ form.password2.label_tag }}
-      {{ form.password2 }}
-      {{ form.password2.errors }}
+    <div>
+      {{ form.password2.label_tag }}<br>
+      {{ form.password2 }}<br>{{ form.password2.errors }}
     </div>
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Cadastrar</button>
-      <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
-    </div>
+    <button type="submit">Cadastrar</button>
   </form>
 {% endblock %}

@@ -1,0 +1,20 @@
+﻿{% extends 'core/base.html' %}
+{% block title %}Espaços Pendentes – Mapas Culturais{% endblock %}
+
+{% block content %}
+  <h2>Espaços Pendentes</h2>
+  <p>Estes espaços foram submetidos e aguardam aprovação:</p>
+  <ul>
+    {% for space in spaces %}
+      <li>
+        <strong>{{ space.name }}</strong> – {{ space.location }}
+        <br>
+        <a href="{% url 'space_approve' space.pk %}">Aprovar</a>
+        | <a href="{% url 'space_update'  space.pk %}">Editar</a>
+        | <a href="{% url 'space_delete'  space.pk %}">Excluir</a>
+      </li>
+    {% empty %}
+      <li>Nenhum espaço pendente.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

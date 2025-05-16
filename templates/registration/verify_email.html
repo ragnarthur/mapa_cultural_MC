@@ -1,0 +1,15 @@
+﻿{% extends "core/base.html" %}
+{% block content %}
+<h2>Verifique seu e-mail</h2>
+<p>Digite o código de verificação enviado para seu e-mail:</p>
+<form method="post">
+  {% csrf_token %}
+  <input type="text" name="code" placeholder="Código" required>
+  <button type="submit">Verificar</button>
+</form>
+{% if messages %}
+  {% for msg in messages %}
+    <div class="alert alert-{{ msg.tags }}">{{ msg }}</div>
+  {% endfor %}
+{% endif %}
+{% endblock %}

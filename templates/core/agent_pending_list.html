@@ -1,0 +1,21 @@
+﻿{% extends 'core/base.html' %}
+{% block title %}Agentes Pendentes – Mapas Culturais{% endblock %}
+
+{% block content %}
+  <h2>Agentes Pendentes</h2>
+  <p>Estes agentes foram submetidos e aguardam aprovação:</p>
+  <ul>
+    {% for agent in agents %}
+      <li>
+        <strong>{{ agent.name }}</strong> – {{ agent.email }}
+        {% if agent.area_of_activity %} ({{ agent.area_of_activity }}){% endif %}
+        <br>
+        <a href="{% url 'agent_approve' agent.pk %}">Aprovar</a>
+        | <a href="{% url 'agent_update'  agent.pk %}">Editar</a>
+        | <a href="{% url 'agent_delete'  agent.pk %}">Excluir</a>
+      </li>
+    {% empty %}
+      <li>Nenhum agente pendente.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

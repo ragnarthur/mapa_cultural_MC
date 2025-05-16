@@ -1,7 +1,28 @@
 ﻿{% extends 'core/base.html' %}
+
 {% block title %}Início – Mapas Culturais{% endblock %}
 
 {% block content %}
-  <h2>Bem-vindo ao Mapas Culturais</h2>
-  <p>Use o menu para navegar entre subsites, agentes, espaços e eventos.</p>
+  <section class="welcome">
+    <h2>Bem-vindo ao Mapa Cultural de Monte Carmelo</h2>
+    <p>
+      Aqui você pode registrar e explorar agentes culturais, espaços e eventos
+      de Monte Carmelo.  
+      Contribua para fortalecer a nossa cultura local!
+    </p>
+    <ul class="home-actions">
+      {% if perms.core.add_agent %}
+        <li><a href="{% url 'agent_create' %}">Cadastrar Agente</a></li>
+      {% endif %}
+      {% if perms.core.add_space %}
+        <li><a href="{% url 'space_create' %}">Cadastrar Espaço</a></li>
+      {% endif %}
+      {% if perms.core.add_event %}
+        <li><a href="{% url 'event_create' %}">Cadastrar Evento</a></li>
+      {% endif %}
+      {% if not user.is_authenticated %}
+        <li><a href="{% url 'signup' %}">Registrar-se</a></li>
+      {% endif %}
+    </ul>
+  </section>
 {% endblock %}

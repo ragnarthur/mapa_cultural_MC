@@ -1,6 +1,4 @@
-﻿# core/forms.py
-
-from django import forms
+﻿from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Agent, Space, Event
@@ -26,11 +24,7 @@ class RegistrationForm(UserCreationForm):
         user.email = self.cleaned_data['email']
         if commit:
             user.save()
-            Agent.objects.create(
-                user  = user,
-                name  = self.cleaned_data['name'],
-                email = self.cleaned_data['email']
-            )
+            # Criação do perfil do agente pode ser feita após email verificado
         return user
 
 class AgentForm(forms.ModelForm):
@@ -47,7 +41,7 @@ class AgentForm(forms.ModelForm):
             'area_of_activity': forms.TextInput(attrs={'class': 'form-control'}),
             'education':        forms.TextInput(attrs={'class': 'form-control'}),
             'bio':              forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
-            'contact':          forms.TextInput(attrs={'class': 'form-control'}),
+            'contact':          forms.TextInput(attrs={'id': 'contact', 'class': 'form-control', 'placeholder': '(XX)XXXXX-XXXX'}),
         }
 
 class SpaceForm(forms.ModelForm):

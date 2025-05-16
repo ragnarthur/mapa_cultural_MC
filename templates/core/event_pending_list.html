@@ -1,0 +1,21 @@
+﻿{% extends 'core/base.html' %}
+{% block title %}Eventos Pendentes – Mapas Culturais{% endblock %}
+
+{% block content %}
+  <h2>Eventos Pendentes</h2>
+  <p>Estes eventos foram submetidos e aguardam aprovação:</p>
+  <ul>
+    {% for event in events %}
+      <li>
+        <strong>{{ event.title }}</strong><br>
+        {{ event.start|date:"d/m/Y H:i" }} até {{ event.end|date:"d/m/Y H:i" }}
+        <br>
+        <a href="{% url 'event_approve' event.pk %}">Aprovar</a>
+        | <a href="{% url 'event_update'  event.pk %}">Editar</a>
+        | <a href="{% url 'event_delete'  event.pk %}">Excluir</a>
+      </li>
+    {% empty %}
+      <li>Nenhum evento pendente.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

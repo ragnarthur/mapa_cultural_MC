@@ -6,6 +6,14 @@
 {% block content %}
 <section class="agent-form container">
   <h2>{{ action }} Agente Cultural</h2>
+  
+  {# Mensagem de pendência para agentes não aprovados (edição) #}
+  {% if form.instance.pk and not form.instance.approved %}
+    <div class="alert alert-info">
+      Suas informações aguardam aprovação dos administradores para aparecerem na plataforma.
+    </div>
+  {% endif %}
+
   <form method="post" novalidate>
     {% csrf_token %}
     {{ form.non_field_errors }}
@@ -60,13 +68,14 @@
     </div>
 
     <div class="form-group">
-      {{ form.contact.label_tag }}
-      {{ form.contact }}
-      {% if form.contact.help_text %}
-        <small class="help-text">{{ form.contact.help_text }}</small>
-      {% endif %}
-      {{ form.contact.errors }}
-    </div>
+      <label for="id_contact">Telefone / Contato:</label>
+      <input type="text" name="contact" id="phone" class="phone-input" value="{{ form.contact.value|default_if_none:'' }}">
+      <small class="help-text">{{ form.contact.help_text }}</small>
+     {{ form.contact.errors }}
+   </div>
+
+
+
 
     <div class="form-actions">
       <button type="submit" class="btn btn-primary">{{ action }}</button>
@@ -74,4 +83,8 @@
     </div>
   </form>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'core/js/mask.js' %}"></script>
 {% endblock %}

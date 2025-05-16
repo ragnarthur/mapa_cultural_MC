@@ -1,0 +1,12 @@
+﻿{% extends 'core/base.html' %}
+{% block content %}
+  <div class="card" style="max-width: 520px; margin: 4rem auto; text-align: center; padding: 2rem;">
+    <h2>Sua ficha está em análise</h2>
+    <p>
+      Seu cadastro de agente cultural foi enviado para avaliação.<br>
+      Assim que for aprovado pela Secretaria da Cultura, estará visível para todos na plataforma.<br>
+      Obrigado por contribuir com o Mapa Cultural de Monte Carmelo!
+    </p>
+    <a href="{% url 'home' %}" class="btn">Voltar para a página inicial</a>
+  </div>
+{% endblock %}

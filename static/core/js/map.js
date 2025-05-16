@@ -27,3 +27,24 @@ document.addEventListener("DOMContentLoaded", function() {
       .addTo(map);
   });
 });
+
+// 5. Máscara input telefone
+document.addEventListener('DOMContentLoaded', function() {
+    var phoneInput = document.querySelector('.phone-input');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let x = e.target.value.replace(/\D/g, '').slice(0, 11); // limita a 11 dígitos
+            let formatted = '';
+            if (x.length > 0) {
+                formatted += '(' + x.substring(0,2);
+            }
+            if (x.length >= 3) {
+                formatted += ') ' + x.substring(2,7);
+            }
+            if (x.length >= 7) {
+                formatted += '-' + x.substring(7,11);
+            }
+            e.target.value = formatted;
+        });
+    }
+});

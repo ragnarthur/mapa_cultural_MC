@@ -1,6 +1,8 @@
 # mapas_culturais/urls.py
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import include, path
 from django.contrib import admin
-from django.urls import path, include
 
 urlpatterns = [
     # Painel de administração
@@ -12,3 +14,10 @@ urlpatterns = [
     # Rotas do aplicativo core
     path('', include('core.urls')),
 ]
+
+# só adiciona esta parte em DEV, para servir os estáticos quando DEBUG=False
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.STATIC_URL,
+        document_root=settings.STATICFILES_DIRS[0]  # ou settings.STATIC_ROOT, se você rodar collectstatic
+    )

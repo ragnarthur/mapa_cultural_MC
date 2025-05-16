@@ -12,14 +12,27 @@
     <h1>Mapas Culturais</h1>
     <nav>
       <a href="{% url 'home' %}">Início</a>
+
+      {# Link para admins verem todos agentes #}
       {% if perms.core.view_agent %}
         | <a href="{% url 'agent_list' %}">Agentes</a>
+        | <a href="{% url 'agent_pending_list' %}">Pendentes</a>
+      {% elif user.is_authenticated %}
+        {# Se usuário autenticado, verifica se tem ficha de agente #}
+        {% if user.agent_profile %}
+          | <a href="{% url 'agent_update' user.agent_profile.pk %}">Minha Ficha</a>
+        {% else %}
+          | <a href="{% url 'agent_create' %}">Cadastrar Agente</a>
+        {% endif %}
       {% endif %}
+
       {% if perms.core.view_space %}
         | <a href="{% url 'space_list' %}">Espaços</a>
+        | <a href="{% url 'space_pending_list' %}">Espaços Pendentes</a>
       {% endif %}
       {% if perms.core.view_event %}
         | <a href="{% url 'event_list' %}">Eventos</a>
+        | <a href="{% url 'event_pending_list' %}">Eventos Pendentes</a>
       {% endif %}
 
       {% if user.is_authenticated %}
@@ -32,6 +45,15 @@
     </nav>
   </header>
 
+  {# Bloco de mensagens do Django #}
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <div class="alert {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <main>
     {% block content %}{% endblock %}
   </main>
@@ -42,5 +64,8 @@
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   {% block scripts %}{% endblock %}
+
+  <script src="{% static 'core/js/map.js' %}"></script>
+
 </body>
 </html>
