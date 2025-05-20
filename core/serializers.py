@@ -19,10 +19,25 @@ class AgentSerializer(serializers.ModelSerializer):
         ]
 
 class SpaceSerializer(serializers.ModelSerializer):
+    lat = serializers.SerializerMethodField()
+    lng = serializers.SerializerMethodField()
+
     class Meta:
         model = Space
-        fields = ['id', 'name', 'location', 'desc', 'approved']
+        fields = ['id', 'name', 'location', 'lat', 'lng', 'desc', 'approved']
 
+    def get_lat(self, obj):
+        try:
+            return float(obj.location.split(',')[0].strip())
+        except:
+            return None
+
+    def get_lng(self, obj):
+        try:
+            return float(obj.location.split(',')[1].strip())
+        except:
+            return None
+        
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event

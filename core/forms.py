@@ -50,9 +50,26 @@ class SpaceForm(forms.ModelForm):
         fields = ['name', 'location', 'desc']
         widgets = {
             'name':      forms.TextInput(attrs={'class': 'form-control'}),
-            'location':  forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'lng, lat'}),
+            'location':  forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'lat,lng'}),
             'desc':      forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
+
+    def clean_location(self):
+        """
+        Garante que o campo será salvo como 'lat,lng', sem espaços.
+        """
+        location = self.cleaned_data['location'].replace(" ", "")
+        # Opcional: pode validar se está no formato correto.
+        if ',' not in location:
+            raise forms.ValidationError("Digite no formato: latitude,longitude (ex: -18.73149950768294,-47.4982353736)")
+        lat, lng = location.split(',', 1)
+        try:
+            float(lat)
+            float(lng)
+        except ValueError:
+            raise forms.ValidationError("Latitude e longitude devem ser números válidos.")
+        return location
+
 
 class EventForm(forms.ModelForm):
     class Meta:

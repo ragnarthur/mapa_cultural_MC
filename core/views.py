@@ -9,6 +9,7 @@ from .forms import AgentForm, SpaceForm, EventForm, RegistrationForm
 from rest_framework import viewsets, permissions
 from .serializers import AgentSerializer, SpaceSerializer, EventSerializer
 import random
+import json
 
 def home(request):
     return render(request, 'core/home.html')
@@ -136,7 +137,19 @@ def agent_approve(request, pk):
 @permission_required('core.view_space', raise_exception=True)
 def space_list(request):
     spaces = Space.objects.filter(approved=True)
-    return render(request, 'core/space_list.html', {'spaces': spaces})
+    map_points = []
+    for space in spaces:
+        if ',' in space.location:
+            lat, lng = space.location.split(',')
+            map_points.append({
+                "name": space.name,
+                "lat": float(lat.strip()),
+                "lng": float(lng.strip())
+            })
+    return render(request, 'core/space_list.html', {
+        'spaces': spaces,
+        'map_points_json': json.dumps(map_points)  # Só |safe no template
+    })
 
 @login_required
 @permission_required('core.view_space', raise_exception=True)
@@ -236,8 +249,6 @@ def event_approve(request, pk):
     return redirect('event_pending_list')
 
 # ----------- API REST (DRF) ---------------
-
-from rest_framework import viewsets
 
 class AgentViewSet(viewsets.ModelViewSet):
     queryset = Agent.objects.all()

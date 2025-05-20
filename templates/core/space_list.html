@@ -1,34 +1,31 @@
 ﻿{% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}Espaços – Mapas Culturais{% endblock %}
-
 {% block content %}
-  <h2>Lista de Espaços</h2>
-  <p><a href="{% url 'space_create' %}">+ Adicionar Espaço</a></p>
+<div class="container">
+    <h2>Lista de Espaços</h2>
+    <a href="{% url 'space_create' %}" class="btn btn-primary mb-3">+ Adicionar Espaço</a>
+    
+    <div id="mapid" style="width: 95%; height: 400px; margin: 0 auto 1.5rem auto; border-radius: 12px; box-shadow: 0 4px 16px #00000018;"></div>
+    
+    <!-- Dados serializados para o JS -->
+    <script id="spaces-data" type="application/json">
+      {{ map_points_json|safe }}
+    </script>
 
-  <div id="map" style="height: 400px; margin-bottom: 1em;"></div>
-
-  <ul>
-    {% for sp in spaces %}
-      <li>{{ sp.name }} — ({{ sp.location.y }}, {{ sp.location.x }})</li>
-    {% empty %}
-      <li>Nenhum espaço cadastrado.</li>
-    {% endfor %}
-  </ul>
+    <ul>
+        {% for sp in spaces %}
+            <li>
+                <a href="#" class="space-link" data-space="{{ forloop.counter0 }}"><b>{{ sp.name }}</b></a>
+            </li>
+        {% empty %}
+            <li>Nenhum espaço cadastrado ainda.</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
 
 {% block scripts %}
-  <script id="spaces-data" type="application/json">
-  [
-    {% for sp in spaces %}
-      {
-        "name": "{{ sp.name|escapejs }}",
-        "lat": {{ sp.location.y }},
-        "lng": {{ sp.location.x }}
-      }{% if not forloop.last %},{% endif %}
-    {% endfor %}
-  ]
-  </script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script src="{% static 'core/js/map.js' %}"></script>
 {% endblock %}
