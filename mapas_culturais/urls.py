@@ -13,6 +13,7 @@ urlpatterns = [
 
     # Rotas do aplicativo core
     path('', include('core.urls')),
+    path('api/', include('core.api_urls')),
 ]
 
 # só adiciona esta parte em DEV, para servir os estáticos quando DEBUG=False

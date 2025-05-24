@@ -1,8 +1,11 @@
-﻿/* RESET & BASE */
-*,
-*::before,
-*::after { box-sizing: border-box; }
+﻿/* ----------------------------------------
+   RESET & BASE STYLES
+   ---------------------------------------- */
 
+/* Box model para todos elementos */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Reset básico de html e body */
 html, body {
   height: 100%;
   margin: 0;
@@ -10,6 +13,7 @@ html, body {
   font-size: 16px;
 }
 
+/* Fonte e fundo geral */
 body {
   display: flex;
   flex-direction: column;
@@ -19,40 +23,9 @@ body {
   color: #222;
 }
 
-/* HEADER */
-header {
-  background: #fff;
-  border-bottom: 1.5px solid #d8e3f1;
-  padding: 1.5rem 2rem 1.2rem 2rem;
-  flex: 0 0 auto;
-  box-shadow: 0 2px 12px 0 #0056b305;
-  position: relative;
-  z-index: 2;
-}
-header h1 {
-  display: inline-block;
-  margin: 0;
-  font-size: 2.2rem;
-  font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
-  color: #0066cc;
-  letter-spacing: 1px;
-  vertical-align: middle;
-}
-header nav {
-  display: inline-block;
-  vertical-align: middle;
-  margin-left: 2rem;
-}
-header nav a {
-  margin-right: 1.3rem;
-  font-size: 1rem;
-  color: #444;
-  text-decoration: none;
-  transition: color 0.15s;
-}
-header nav a:hover { color: #e4572e; }
-
-/* MAIN */
+/* ----------------------------------------
+   MAIN CONTEÚDO CENTRALIZADO
+   ---------------------------------------- */
 main {
   flex: 1 0 auto;
   width: 100%;
@@ -61,7 +34,9 @@ main {
   margin: 0 auto;
 }
 
-/* FORMULÁRIO CENTRALIZADO */
+/* ----------------------------------------
+   FORMULÁRIOS
+   ---------------------------------------- */
 .agent-form.container {
   display: flex;
   flex-direction: column;
@@ -70,7 +45,6 @@ main {
   min-height: 70vh;
 }
 
-/* FORMULÁRIOS */
 form {
   background: #fff;
   border-radius: 10px;
@@ -110,6 +84,7 @@ form select:focus {
   gap: 0.9rem;
   justify-content: flex-start;
 }
+
 .btn, button, input[type="submit"] {
   background: linear-gradient(90deg, #007bff, #00c3a5 85%);
   border: none;
@@ -138,7 +113,9 @@ form select:focus {
   border-color: #f1a208;
 }
 
-/* ALERTS */
+/* ----------------------------------------
+   ALERTAS
+   ---------------------------------------- */
 .alert {
   padding: 1.1rem 1.2rem;
   border-radius: 5px;
@@ -151,15 +128,18 @@ form select:focus {
   border: 1px solid #b6dcfb;
 }
 
-/* RESPONSIVO */
+/* ----------------------------------------
+   RESPONSIVO (mobile/tablet)
+   ---------------------------------------- */
 @media (max-width: 800px) {
   main { max-width: 100%; padding: 1.3rem 0.5rem; }
   form { padding: 1.3rem 0.7rem; }
-  header { padding: 1rem 0.5rem; }
   .agent-form.container { padding: 1rem 0.2rem; }
 }
 
-/* FOOTER */
+/* ----------------------------------------
+   FOOTER
+   ---------------------------------------- */
 footer {
   background: #f0f0f0;
   padding: 1rem 2rem;

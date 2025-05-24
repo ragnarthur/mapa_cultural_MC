@@ -35,7 +35,11 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True  # durante desenvolvimento!
+#CORS_ALLOW_ALL_ORIGINS = True  # durante desenvolvimento!
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",
+    # outros domínios se precisar
+]
 
 ROOT_URLCONF = 'mapas_culturais.urls'
 

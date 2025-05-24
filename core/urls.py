@@ -1,4 +1,5 @@
-﻿from django.urls import path
+﻿from django.urls import path, include
+from django.contrib import admin
 from . import views
 
 urlpatterns = [
@@ -29,4 +30,8 @@ urlpatterns = [
     path('events/<int:pk>/excluir/', views.event_delete, name='event_delete'),
     path('events/<int:pk>/aprovar/', views.event_approve, name='event_approve'),
     path('events/pendentes/', views.event_pending_list, name='event_pending_list'),
+
+
+    path('admin/', admin.site.urls),
+    path('api/', include('core.api_urls')),
 ]

@@ -4,50 +4,166 @@
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}Mapas Culturais{% endblock %}</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <style>
+    html, body {
+      overflow-x: hidden;
+    }
+    .navbar-background {
+      width: 98vw;
+      max-width: 1800px;
+      min-width: 320px;
+      margin: 24px auto 0 auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 16px #002c6620;
+      padding: 0;
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      overflow: visible;
+    }
+    .navbar-custom {
+      background: #0667b1 !important;
+      border-bottom: none !important;
+      min-height: 78px;
+      border-radius: 10px;
+      box-shadow: none;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+    .navbar-custom > .container-fluid {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin: 0 !important;
+      width: 100%;
+      min-height: 54px;
+      align-items: center;
+      display: flex;
+    }
+    .logo-navbar {
+      width: 300px;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      background-image: url("{% static 'img/logo_sec_cultura_prefeitura_2025.png' %}");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: left center;
+      background-color: #0667b1;
+      margin: 0 !important;
+      border-radius: 18px 0 0 20px;
+      box-shadow: none;
+    }
+    .navbar-brand { text-decoration: none !important; padding: 0 !important; }
+    .brand-text { display: none; }
+    .navbar-nav {
+      flex-wrap: nowrap !important;
+      white-space: nowrap !important;
+      margin-left: 18px;
+    }
+    .navbar-custom .navbar-nav .nav-link,
+    .navbar-custom .navbar-text {
+      color: #fff !important;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 0.3px;
+      padding: 0 1.3rem !important;
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+    .navbar-custom .navbar-nav .nav-link.active,
+    .navbar-custom .navbar-nav .nav-link:hover {
+      color: #f1a208 !important;
+    }
+    .navbar-custom .navbar-toggler {
+      border-color: #fff !important;
+    }
+    .navbar-custom .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+    @media (max-width: 1000px) {
+      .navbar-background { margin-top: 10px; min-height: 38px; border-radius: 11px;}
+      .logo-navbar { width: 140px; height: 38px; border-radius: 11px 0 0 11px;}
+      .navbar-custom { min-height: 38px; border-radius: 11px; }
+      .navbar-custom > .container-fluid { min-height: 38px;}
+      .navbar-custom .navbar-nav .nav-link, .navbar-custom .navbar-text {
+        font-size: 1rem;
+        padding: 0 0.6rem !important;
+      }
+      .navbar-nav { margin-left: 8px;}
+    }
+    @media (max-width: 700px) {
+      .navbar-background { margin-top: 2px; min-height: 28px; border-radius: 6px;}
+      .logo-navbar { width: 70px; height: 28px; border-radius: 6px 0 0 6px;}
+      .navbar-custom { min-height: 28px; border-radius: 6px; }
+      .navbar-custom > .container-fluid { min-height: 28px;}
+      .navbar-custom .navbar-nav .nav-link, .navbar-custom .navbar-text {
+        font-size: 0.93rem;
+        padding: 0 0.2rem !important;
+      }
+      .navbar-nav { margin-left: 3px;}
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>Mapas Culturais</h1>
-    <nav>
-      <a href="{% url 'home' %}">Início</a>
-
-      {# Link para admins verem todos agentes #}
-      {% if perms.core.view_agent %}
-        | <a href="{% url 'agent_list' %}">Agentes</a>
-        | <a href="{% url 'agent_pending_list' %}">Pendentes</a>
-      {% elif user.is_authenticated %}
-        {# Se usuário autenticado, verifica se tem ficha de agente #}
-        {% if user.agent_profile %}
-          | <a href="{% url 'agent_update' user.agent_profile.pk %}">Minha Ficha</a>
-        {% else %}
-          | <a href="{% url 'agent_create' %}">Cadastrar Agente</a>
-        {% endif %}
-      {% endif %}
-
-      {% if perms.core.view_space %}
-        | <a href="{% url 'space_list' %}">Espaços</a>
-        | <a href="{% url 'space_pending_list' %}">Espaços Pendentes</a>
-      {% endif %}
-      {% if perms.core.view_event %}
-        | <a href="{% url 'event_list' %}">Eventos</a>
-        | <a href="{% url 'event_pending_list' %}">Eventos Pendentes</a>
-      {% endif %}
-
-      {% if user.is_authenticated %}
-        | Olá, {{ user.username }}!
-        | <a href="{% url 'logout' %}">Sair</a>
-      {% else %}
-        | <a href="{% url 'login' %}">Entrar</a>
-        | <a href="{% url 'signup' %}">Registrar-se</a>
-      {% endif %}
-    </nav>
+    <div class="navbar-background">
+      <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+          <a class="navbar-brand logo-navbar" href="{% url 'home' %}">
+            <span class="brand-text">Mapas Culturais</span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              {# Link "Início" removido completamente! #}
+              {% if perms.core.view_agent %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'agent_list' %}">Agentes</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'agent_pending_list' %}">Pendentes</a></li>
+              {% elif user.is_authenticated %}
+                {% if user.agent_profile %}
+                  <li class="nav-item"><a class="nav-link" href="{% url 'agent_update' user.agent_profile.pk %}">Minha Ficha</a></li>
+                {% else %}
+                  <li class="nav-item"><a class="nav-link" href="{% url 'agent_create' %}">Cadastrar Agente</a></li>
+                {% endif %}
+              {% endif %}
+              {% if perms.core.view_space %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'space_list' %}">Espaços</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'space_pending_list' %}">Espaços Pendentes</a></li>
+              {% endif %}
+              {% if perms.core.view_event %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'event_list' %}">Eventos</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'event_pending_list' %}">Eventos Pendentes</a></li>
+              {% endif %}
+            </ul>
+            <ul class="navbar-nav mb-2 mb-lg-0">
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <span class="navbar-text me-2">Olá, {{ user.username }}!</span>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Sair</a></li>
+              {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Entrar</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Registrar-se</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
   </header>
 
-  {# Bloco de mensagens do Django #}
   {% if messages %}
-    <div class="messages">
+    <div class="container mt-3">
       {% for message in messages %}
         <div class="alert {{ message.tags }}">{{ message }}</div>
       {% endfor %}
@@ -62,10 +178,10 @@
     <small>© 2025 Prefeitura de Monte Carmelo</small>
   </footer>
 
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   {% block scripts %}{% endblock %}
-
   <script src="{% static 'core/js/map.js' %}"></script>
-
 </body>
 </html>
