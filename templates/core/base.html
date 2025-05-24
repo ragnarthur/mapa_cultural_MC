@@ -9,15 +9,35 @@
   <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <style>
+    /* ===========================================
+       CONFIGURAÇÃO PRINCIPAL DE CORES E FUNDOS
+       ===========================================
+       - Altere a variável --background-institucional para trocar o tom de fundo do sistema inteiro.
+       - Padrão atual: #FCFCFC, igual ao fundo da logo da Prefeitura.
+    */
+    :root {
+      --background-institucional: #FCFCFC; /* Tom do fundo institucional da Prefeitura */
+    }
+
+    /* ================================================
+       FUNDO GLOBAL
+       ================================================ */
     html, body {
       overflow-x: hidden;
+      background-color: var(--background-institucional) !important; /* Fica fácil padronizar! */
     }
+
+    /* ================================================
+       BARRA DE NAVEGAÇÃO: CARD/FITA BRANCA DE FUNDO
+       - Para ajustar largura e altura da "fita" branca da navbar, modifique width/min-height.
+       - Para trocar a cor de fundo, altere o background-color.
+    */
     .navbar-background {
-      width: 98vw;
+      width: 98vw;                    /* Ajuste a largura da faixa branca */
       max-width: 1800px;
       min-width: 320px;
       margin: 24px auto 0 auto;
-      background: #fff;
+      background: var(--background-institucional); /* Sempre use a variável institucional */
       border-radius: 18px;
       box-shadow: 0 2px 16px #002c6620;
       padding: 0;
@@ -26,10 +46,15 @@
       align-items: center;
       overflow: visible;
     }
+
+    /* ================================================
+       NAVBAR AZUL
+       - Ajuste min-height para altura e width para ocupar mais/menos do card branco.
+    */
     .navbar-custom {
-      background: #0667b1 !important;
+      background: #0667b1 !important; /* Azul institucional da cultura */
       border-bottom: none !important;
-      min-height: 78px;
+      min-height: 78px;               /* Altura da navbar azul */
       border-radius: 10px;
       box-shadow: none;
       width: 100%;
@@ -47,8 +72,13 @@
       align-items: center;
       display: flex;
     }
+
+    /* ================================================
+       LOGO DA NAVBAR
+       - Para aumentar/diminuir, altere width e height.
+    */
     .logo-navbar {
-      width: 300px;
+      width: 300px;   /* <<--- Aumente aqui para deixar a logo mais visível */
       height: 74px;
       display: flex;
       align-items: center;
@@ -63,6 +93,11 @@
     }
     .navbar-brand { text-decoration: none !important; padding: 0 !important; }
     .brand-text { display: none; }
+
+    /* ================================================
+       NAVEGAÇÃO - LINKS
+       - Para ajustar espaçamento, tamanho da fonte ou cor, modifique aqui.
+    */
     .navbar-nav {
       flex-wrap: nowrap !important;
       white-space: nowrap !important;
@@ -88,6 +123,12 @@
     .navbar-custom .navbar-toggler-icon {
       background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
     }
+
+    /* ================================================
+       RESPONSIVIDADE
+       - Ajuste de tamanhos para telas menores (notebook/tablet/celular)
+       - Para alterar altura/largura da navbar/logo nesses casos, modifique aqui.
+    */
     @media (max-width: 1000px) {
       .navbar-background { margin-top: 10px; min-height: 38px; border-radius: 11px;}
       .logo-navbar { width: 140px; height: 38px; border-radius: 11px 0 0 11px;}
@@ -110,6 +151,55 @@
       }
       .navbar-nav { margin-left: 3px;}
     }
+
+    /* ================================================
+       MARCA D'ÁGUA DA PREFEITURA (fundo institucional)
+       - Ajuste max-width/max-height ou opacity para aumentar/diminuir destaque.
+       - Altere filter para mudar o efeito visual (ex: mais transparente, cinza etc).
+    */
+    .watermark-prefeitura {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+    }
+    .watermark-prefeitura img {
+      max-width: 52vw;     /* <<--- Altere aqui para deixar a marca maior/menor */
+      max-height: 64vh;
+      opacity: 0.20;       /* <<--- Altere aqui para mais ou menos transparência */
+      filter: grayscale(20%);
+      user-select: none;
+      margin: 0 2vw 2vh 0;
+      /* Se quiser centralizar ou mexer no alinhamento, ajuste align-items/justify-content do parent */
+    }
+    @media (max-width: 900px) {
+      .watermark-prefeitura img {
+        max-width: 80vw;
+        max-height: 28vh;
+      }
+    }
+    body > *:not(.watermark-prefeitura) {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ================================================
+       NOTAS E DICAS PARA DOCUMENTAÇÃO:
+       -----------------------------------------------
+       - Para mudar o tom institucional, altere só a variável em :root.
+       - Para aplicar o fundo só em áreas específicas, crie .background-institucional.
+         Exemplo: .minha-area { background-color: var(--background-institucional) !important; }
+       - Use !important para garantir que a cor sobrescreva o Bootstrap.
+       - Sempre prefira as variáveis para facilitar ajustes futuros!
+       - Comentários assim (no padrão de bloco) explicam cada ponto para desenvolvedores.
+       -----------------------------------------------
+    */
   </style>
 </head>
 <body>
@@ -177,6 +267,11 @@
   <footer>
     <small>© 2025 Prefeitura de Monte Carmelo</small>
   </footer>
+
+  <!-- Marca d’água institucional - canto inferior direito -->
+  <div class="watermark-prefeitura">
+    <img src="{% static 'img/logo_prefeitura2_2025.png' %}" alt="Prefeitura de Monte Carmelo - Marca d'água"/>
+  </div>
 
   <!-- Bootstrap Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

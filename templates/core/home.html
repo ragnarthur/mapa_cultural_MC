@@ -3,26 +3,130 @@
 {% block title %}Início – Mapas Culturais{% endblock %}
 
 {% block content %}
-  <section class="welcome">
-    <h2>Bem-vindo ao Mapa Cultural de Monte Carmelo</h2>
-    <p>
-      Aqui você pode registrar e explorar agentes culturais, espaços e eventos
-      de Monte Carmelo.  
-      Contribua para fortalecer a nossa cultura local!
-    </p>
-    <ul class="home-actions">
-      {% if perms.core.add_agent %}
-        <li><a href="{% url 'agent_create' %}">Cadastrar Agente</a></li>
-      {% endif %}
-      {% if perms.core.add_space %}
-        <li><a href="{% url 'space_create' %}">Cadastrar Espaço</a></li>
-      {% endif %}
-      {% if perms.core.add_event %}
-        <li><a href="{% url 'event_create' %}">Cadastrar Evento</a></li>
-      {% endif %}
-      {% if not user.is_authenticated %}
-        <li><a href="{% url 'signup' %}">Registrar-se</a></li>
-      {% endif %}
-    </ul>
-  </section>
+<div class="container py-5">
+
+  <!-- Carrossel Informativo -->
+  <div id="carrosselInfo" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="5300">
+    <div class="carousel-inner">
+
+      <!-- 1º Slide: Mensagem de boas-vindas (NÃO ALTERAR TAMANHO) -->
+      <div class="carousel-item active">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <h1 class="display-5 fw-bold mb-3" style="color: #0667b1;">
+              Bem-vindo ao <span style="color: #f1a208;">Mapa Cultural de Monte Carmelo</span>
+            </h1>
+            <p class="lead mb-4" style="color: #222; font-size: 1.25rem;">
+              Plataforma oficial para <strong>agentes culturais</strong>, <strong>gestores</strong> e <strong>comunidade</strong> registrarem, divulgarem e fortalecerem a cultura em nossa cidade.<br>
+              Participe, divulgue seu espaço ou evento, encontre oportunidades e ajude a mapear o nosso patrimônio cultural!
+            </p>
+            <ul class="list-unstyled mb-4">
+              {% if perms.core.add_agent %}
+              <li class="mb-2">
+                <span class="badge rounded-pill" style="background-color: #f1a208; color: #fff; font-size: 1rem; margin-right: 0.6em;">1</span>
+                <a href="{% url 'agent_create' %}" class="fw-semibold" style="color: #0667b1; text-decoration: underline;">Cadastrar Agente Cultural</a>
+              </li>
+              {% endif %}
+              {% if perms.core.add_space %}
+              <li class="mb-2">
+                <span class="badge rounded-pill" style="background-color: #f1a208; color: #fff; font-size: 1rem; margin-right: 0.6em;">2</span>
+                <a href="{% url 'space_create' %}" class="fw-semibold" style="color: #0667b1; text-decoration: underline;">Cadastrar Espaço Cultural</a>
+              </li>
+              {% endif %}
+              {% if perms.core.add_event %}
+              <li>
+                <span class="badge rounded-pill" style="background-color: #f1a208; color: #fff; font-size: 1rem; margin-right: 0.6em;">3</span>
+                <a href="{% url 'event_create' %}" class="fw-semibold" style="color: #0667b1; text-decoration: underline;">Cadastrar Evento Cultural</a>
+              </li>
+              {% endif %}
+              {% if not user.is_authenticated %}
+              <li>
+                <span class="badge rounded-pill" style="background-color: #0667b1; color: #fff; font-size: 1rem; margin-right: 0.6em;">&#x1F511;</span>
+                <a href="{% url 'signup' %}" class="fw-semibold" style="color: #0667b1; text-decoration: underline;">Registrar-se</a>
+              </li>
+              {% endif %}
+            </ul>
+            <a href="{% url 'agent_list' %}" class="btn btn-primary px-4 py-2 me-2 mb-2" style="background: #0667b1; border: none;">Explorar Agentes</a>
+            <a href="{% url 'space_list' %}" class="btn btn-outline-primary px-4 py-2 me-2 mb-2" style="border-color: #0667b1; color: #0667b1;">Explorar Espaços</a>
+            <a href="{% url 'event_list' %}" class="btn btn-outline-primary px-4 py-2 mb-2" style="border-color: #0667b1; color: #0667b1;">Explorar Eventos</a>
+          </div>
+        </div>
+      </div>
+      <!-- Fim slide de boas-vindas -->
+
+      <!-- ===== Slides 2, 3 e 4: TAMANHO MAIOR NOS TEXTOS E IMAGENS ===== -->
+      <!-- Para ajustar o tamanho posteriormente:
+           - Ajuste 'max-width', 'height', 'font-size', 'display-4' ou classes Bootstrap conforme desejado.
+      -->
+
+      <!-- 2º Slide: Exemplo de notícia/evento -->
+      <div class="carousel-item">
+        <div class="row justify-content-center align-items-center g-4">
+          <div class="col-md-5 text-center">
+            <img src="https://cdn.pixabay.com/photo/2020/03/06/11/14/black-4906807_1280.jpg"
+                 class="d-block w-100 rounded shadow"
+                 alt="Oficina de Dança"
+                 style="max-width: 440px; height: 270px; object-fit: cover;">
+          </div>
+          <div class="col-md-7">
+            <h4 class="mb-2 fw-bold" style="color:#0667b1; font-size:2rem;">Oficina de Dança Contemporânea</h4>
+            <p class="mb-2" style="font-size:1.18rem;">A Secretaria de Cultura convida jovens de 12 a 18 anos para participar da oficina gratuita de dança contemporânea no Centro Cultural. Inscrições abertas até 30/05.</p>
+            <span class="badge rounded-pill bg-primary" style="font-size: 1.02rem;">Evento</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3º Slide: Exemplo de notícia -->
+      <div class="carousel-item">
+        <div class="row justify-content-center align-items-center g-4">
+          <div class="col-md-5 text-center">
+            <img src="https://cdn.pixabay.com/photo/2017/10/16/22/41/home-2858911_960_720.jpg"
+                 class="d-block w-100 rounded shadow"
+                 alt="Palestra"
+                 style="max-width: 440px; height: 270px; object-fit: cover;">
+          </div>
+          <div class="col-md-7">
+            <h4 class="mb-2 fw-bold" style="color:#0667b1; font-size:2rem;">Palestra: História e Patrimônio de Monte Carmelo</h4>
+            <p class="mb-2" style="font-size:1.18rem;">Venha conhecer as riquezas do nosso patrimônio! A palestra será ministrada pelo Prof. João Souza, na Biblioteca Municipal, dia 01/06 às 19h. Aberto ao público.</p>
+            <span class="badge rounded-pill bg-warning text-dark" style="font-size: 1.02rem;">Palestra</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4º Slide: Exemplo de festival -->
+      <div class="carousel-item">
+        <div class="row justify-content-center align-items-center g-4">
+          <div class="col-md-5 text-center">
+            <img src="https://cdn.pixabay.com/photo/2016/11/29/06/17/audience-1867754_1280.jpg"
+                 class="d-block w-100 rounded shadow"
+                 alt="Festival de Música"
+                 style="max-width: 440px; height: 270px; object-fit: cover;">
+          </div>
+          <div class="col-md-7">
+            <h4 class="mb-2 fw-bold" style="color:#0667b1; font-size:2rem;">Festival de Música Popular</h4>
+            <p class="mb-2" style="font-size:1.18rem;">Participe do nosso tradicional Festival de Música Popular de Monte Carmelo. Inscrições abertas para bandas e músicos locais. O evento acontecerá dia 12/06 na Praça Central.</p>
+            <span class="badge rounded-pill bg-success" style="font-size: 1.02rem;">Festival</span>
+          </div>
+        </div>
+      </div>
+      <!-- ===== Fim dos slides de notícias/tamanho maior ===== -->
+
+    </div>
+    <!-- Botões removidos: carrossel é apenas automático -->
+  </div>
+  <!-- Fim Carrossel -->
+
+  <hr class="my-5">
+  <div class="row">
+    <div class="col text-center">
+      <h3 class="fw-semibold mb-3" style="color: #0667b1;">Por que participar?</h3>
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-3">
+        <span class="badge bg-light text-dark px-4 py-2" style="font-size:1rem;"><span style="color: #f1a208;">&#9733;</span> Amplie sua rede de contatos culturais</span>
+        <span class="badge bg-light text-dark px-4 py-2" style="font-size:1rem;"><span style="color: #f1a208;">&#9733;</span> Divulgue espaços e eventos oficiais</span>
+        <span class="badge bg-light text-dark px-4 py-2" style="font-size:1rem;"><span style="color: #f1a208;">&#9733;</span> Tenha acesso a oportunidades e editais</span>
+        <span class="badge bg-light text-dark px-4 py-2" style="font-size:1rem;"><span style="color: #f1a208;">&#9733;</span> Fortaleça a cultura de Monte Carmelo</span>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
