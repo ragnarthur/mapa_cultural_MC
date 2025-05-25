@@ -4,85 +4,125 @@
 {% block title %}{{ action }} Agente Cultural{% endblock %}
 
 {% block content %}
-<section class="agent-form container">
-  <h2>{{ action }} Agente Cultural</h2>
-  
-  {# Mensagem de pendência para agentes não aprovados (edição) #}
-  {% if form.instance.pk and not form.instance.approved %}
-    <div class="alert alert-info">
-      Suas informações aguardam aprovação dos administradores para aparecerem na plataforma.
+<div class="w-100 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg p-4"
+       style="
+            width: 100%;
+            max-width: 1240px;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.56);
+            box-shadow: 0 8px 48px 0 rgba(51, 81, 128, 0.07);
+        ">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold mb-1" style="color:#0667b1; font-size:2.2rem;">{{ action }} Agente Cultural</h2>
+      <span class="text-secondary" style="font-size: 1.12rem;">
+        Preencha seus dados para fazer parte do Mapa Cultural de Monte Carmelo
+      </span>
     </div>
-  {% endif %}
+    {% if form.instance.pk and not form.instance.approved %}
+      <div class="alert alert-info text-center">
+        Suas informações aguardam aprovação dos administradores para aparecerem na plataforma.
+      </div>
+    {% endif %}
 
-  <form method="post" novalidate>
-    {% csrf_token %}
-    {{ form.non_field_errors }}
+    <form method="post" enctype="multipart/form-data" novalidate autocomplete="off" style="font-size:1.13rem; width: 100%; max-width: 950px; margin: 0 auto;">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
 
-    <div class="form-group">
-      {{ form.name.label_tag }}
-      {{ form.name }}
-      {% if form.name.help_text %}
-        <small class="help-text">{{ form.name.help_text }}</small>
-      {% endif %}
-      {{ form.name.errors }}
-    </div>
+      <div class="mb-3">
+        <label for="id_name" class="form-label fw-semibold" style="color:#0667b1; font-size:1.14rem;">Nome</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-light">
+            <i class="bi bi-person-fill" style="color: #f1a208; font-size:1.2rem;"></i>
+          </span>
+          <input type="text" name="name" class="form-control" id="id_name"
+            required value="{{ form.name.value|default_if_none:'' }}" style="font-size:1.11rem;">
+        </div>
+        <small class="text-secondary" style="font-size:.99rem;">Ex: João da Silva</small>
+        {{ form.name.errors }}
+      </div>
 
-    <div class="form-group">
-      {{ form.email.label_tag }}
-      {{ form.email }}
-      {% if form.email.help_text %}
-        <small class="help-text">{{ form.email.help_text }}</small>
-      {% endif %}
-      {{ form.email.errors }}
-    </div>
+      <div class="mb-3">
+        <label for="id_email" class="form-label fw-semibold" style="color:#0667b1; font-size:1.14rem;">E-mail</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-light">
+            <i class="bi bi-envelope-at-fill" style="color: #f1a208; font-size:1.2rem;"></i>
+          </span>
+          <input type="email" name="email" class="form-control" id="id_email"
+            required value="{{ form.email.value|default_if_none:'' }}" style="font-size:1.11rem;">
+        </div>
+        <small class="text-secondary" style="font-size:.99rem;">Ex: seu@email.com</small>
+        {{ form.email.errors }}
+      </div>
 
-    <hr>
+      <div class="mb-3">
+        <label for="id_area_of_activity" class="form-label fw-semibold" style="color:#0667b1; font-size:1.14rem;">Área de Atuação</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-light">
+            <i class="bi bi-pencil-fill" style="color: #f1a208; font-size:1.2rem;"></i>
+          </span>
+          <input type="text" name="area_of_activity" class="form-control" id="id_area_of_activity"
+            value="{{ form.area_of_activity.value|default_if_none:'' }}" style="font-size:1.11rem;">
+        </div>
+        <small class="text-secondary" style="font-size:.99rem;">Ex: Música, Dança, Artes Visuais...</small>
+        {{ form.area_of_activity.errors }}
+      </div>
 
-    <div class="form-group">
-      {{ form.area_of_activity.label_tag }}
-      {{ form.area_of_activity }}
-      {% if form.area_of_activity.help_text %}
-        <small class="help-text">{{ form.area_of_activity.help_text }}</small>
-      {% endif %}
-      {{ form.area_of_activity.errors }}
-    </div>
+      <div class="mb-3">
+        <label for="id_education" class="form-label fw-semibold" style="color:#0667b1; font-size:1.14rem;">Formação Cultural</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-light">
+            <i class="bi bi-mortarboard-fill" style="color: #f1a208; font-size:1.2rem;"></i>
+          </span>
+          <input type="text" name="education" class="form-control" id="id_education"
+            value="{{ form.education.value|default_if_none:'' }}" style="font-size:1.11rem;">
+        </div>
+        <small class="text-secondary" style="font-size:.99rem;">Ex: Bacharel em Música, Técnico em Teatro...</small>
+        {{ form.education.errors }}
+      </div>
 
-    <div class="form-group">
-      {{ form.education.label_tag }}
-      {{ form.education }}
-      {% if form.education.help_text %}
-        <small class="help-text">{{ form.education.help_text }}</small>
-      {% endif %}
-      {{ form.education.errors }}
-    </div>
+      <div class="mb-3">
+        <label for="id_bio" class="form-label fw-semibold" style="color:#0667b1; font-size:1.14rem;">Biografia / Descrição</label>
+        <textarea name="bio" class="form-control" id="id_bio" rows="4" style="font-size:1.11rem;">{{ form.bio.value|default_if_none:'' }}</textarea>
+        <small class="text-secondary" style="font-size:.99rem;">Conte aqui um breve histórico ou currículo resumido.</small>
+        {{ form.bio.errors }}
+      </div>
 
-    <hr>
+      <div class="mb-4">
+        <label for="id_contact" class="form-label fw-semibold" style="color:#0667b1; font-size:1.14rem;">Telefone / Contato</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-light">
+            <i class="bi bi-telephone-fill" style="color: #f1a208; font-size:1.2rem;"></i>
+          </span>
+          <input type="text" name="contact" class="form-control phone-input" id="id_contact"
+            value="{{ form.contact.value|default_if_none:'' }}" style="font-size:1.11rem;">
+        </div>
+        <small class="text-secondary" style="font-size:.99rem;">Ex: Telefone ou WhatsApp</small>
+        {{ form.contact.errors }}
+      </div>
 
-    <div class="form-group">
-      {{ form.bio.label_tag }}
-      {{ form.bio }}
-      {% if form.bio.help_text %}
-        <small class="help-text">{{ form.bio.help_text }}</small>
-      {% endif %}
-      {{ form.bio.errors }}
-    </div>
+      <div class="mb-4">
+        <label for="id_portfolio_pdf" class="form-label fw-semibold" style="color:#0667b1; font-size:1.14rem;">
+          Portfólio Cultural (PDF)
+        </label>
+        <input type="file" name="portfolio_pdf" class="form-control" id="id_portfolio_pdf" accept="application/pdf" style="font-size:1.11rem;">
+        <small class="text-secondary" style="font-size:.99rem;">
+          Envie um arquivo PDF contendo seu portfólio de atuação cultural. Tamanho máximo recomendado: 10 MB.
+        </small>
+        {{ form.portfolio_pdf.errors }}
+      </div>
 
-    <div class="form-group">
-      <label for="id_contact">Telefone / Contato:</label>
-      <input type="text" name="contact" id="phone" class="phone-input" value="{{ form.contact.value|default_if_none:'' }}">
-      <small class="help-text">{{ form.contact.help_text }}</small>
-     {{ form.contact.errors }}
-   </div>
-
-
-
-
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary">{{ action }}</button>
-      <a href="{% url 'agent_list' %}" class="btn btn-secondary">Cancelar</a>
-    </div>
-  </form>
-</section>
+      <div class="d-grid gap-2 mb-2">
+        <button type="submit" class="btn btn-primary fw-semibold py-2"
+          style="background:#0667b1; border:none; border-radius:8px; font-size:1.21rem;">
+          <i class="bi bi-person-plus-fill me-2"></i>{{ action }}
+        </button>
+        <a href="{% url 'agent_list' %}" class="btn btn-outline-secondary fw-semibold py-2" style="border-radius:8px; font-size:1.13rem;">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 {% endblock %}
 
 {% block scripts %}

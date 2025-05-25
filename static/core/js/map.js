@@ -13,6 +13,9 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // 2. Inicializa o mapa (foco em Monte Carmelo)
+  const mapContainer = document.getElementById("mapid");
+  if (!mapContainer) return; // Só executa se existir o container do mapa
+
   const map = L.map("mapid").setView([-18.7315, -47.4982], 13);
 
   // 3. Adiciona camada base OpenStreetMap
@@ -59,23 +62,4 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
   });
-
-  // 7. Máscara input telefone (procura em toda a página)
-  var phoneInput = document.querySelector('.phone-input');
-  if (phoneInput) {
-    phoneInput.addEventListener('input', function(e) {
-      let x = e.target.value.replace(/\D/g, '').slice(0, 11); // limita a 11 dígitos
-      let formatted = '';
-      if (x.length > 0) {
-        formatted += '(' + x.substring(0,2);
-      }
-      if (x.length >= 3) {
-        formatted += ') ' + x.substring(2,7);
-      }
-      if (x.length >= 7) {
-        formatted += '-' + x.substring(7,11);
-      }
-      e.target.value = formatted;
-    });
-  }
 });

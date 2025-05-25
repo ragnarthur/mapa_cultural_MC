@@ -1,12 +1,15 @@
 ﻿{% extends 'core/base.html' %}
 {% block content %}
   <div class="card" style="max-width: 520px; margin: 4rem auto; text-align: center; padding: 2rem;">
-    <h2>Sua ficha está em análise</h2>
-    <p>
-      Seu cadastro de agente cultural foi enviado para avaliação.<br>
-      Assim que for aprovado pela Secretaria da Cultura, estará visível para todos na plataforma.<br>
-      Obrigado por contribuir com o Mapa Cultural de Monte Carmelo!
+    <h2 class="fw-bold mb-3" style="color: #0667b1;">Sua ficha está em análise</h2>
+    <p class="mb-4" style="font-size: 1.17rem; color: #444;">
+      O seu cadastro de agente cultural foi enviado com sucesso e está agora em processo de análise pela Secretaria Municipal de Cultura.<br><br>
+      Assim que sua ficha for aprovada, você receberá um e-mail de confirmação e seu perfil estará disponível na plataforma para toda a comunidade.<br><br>
+      Agradecemos por contribuir com o <b>Mapa Cultural de Monte Carmelo</b>.<br>
+      Caso tenha dúvidas, entre em contato com a Secretaria de Cultura.
     </p>
-    <a href="{% url 'home' %}" class="btn">Voltar para a página inicial</a>
+    <a href="{% url 'home' %}" class="btn btn-info fw-semibold px-4 py-2" style="border-radius: 7px; font-size: 1.1rem;">
+      Voltar para a página inicial
+    </a>
   </div>
 {% endblock %}

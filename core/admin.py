@@ -1,11 +1,9 @@
-# core/admin.py
-
 from django.contrib import admin
 from .models import Agent, Space, Event
 
 @admin.register(Agent)
 class AgentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'name', 'email']  # remova 'created_at'
+    list_display = ['id', 'user', 'name', 'email']
     search_fields = ['name', 'email', 'user__username']
     list_filter = ['user__is_active']
 

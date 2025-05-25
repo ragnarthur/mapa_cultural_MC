@@ -1,15 +1,61 @@
 ﻿{% extends "core/base.html" %}
+{% block title %}Verifique seu e-mail – Mapas Culturais{% endblock %}
+
 {% block content %}
-<h2>Verifique seu e-mail</h2>
-<p>Digite o código de verificação enviado para seu e-mail:</p>
-<form method="post">
-  {% csrf_token %}
-  <input type="text" name="code" placeholder="Código" required>
-  <button type="submit">Verificar</button>
-</form>
-{% if messages %}
-  {% for msg in messages %}
-    <div class="alert alert-{{ msg.tags }}">{{ msg }}</div>
-  {% endfor %}
-{% endif %}
+<div class="container py-5 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <!-- Card mais largo e destacado -->
+  <div class="card shadow-lg p-5" style="max-width: 540px; width: 100%; border-radius: 20px;">
+    <div class="text-center mb-3">
+      <h3 class="fw-bold mb-2" style="color:#0667b1;">Verifique seu e-mail</h3>
+      <span class="text-secondary" style="font-size: 1.08rem;">
+        Digite o código de verificação enviado para seu e-mail cadastrado para ativar sua conta.
+      </span>
+    </div>
+
+    {# Mensagem de sucesso/erro exibida dentro do card, se houver #}
+    {% if messages %}
+      {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }} text-center py-2 mb-3" style="font-size: 1.03rem;">
+          {{ msg }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post" autocomplete="off">
+      {% csrf_token %}
+      <div class="mb-4">
+        <label for="id_code" class="form-label fw-semibold" style="color:#0667b1;">Código de Verificação</label>
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-light" style="border-radius: 7px 0 0 7px;">
+            <i class="bi bi-shield-lock-fill" style="color: #f1a208;"></i>
+          </span>
+          <input
+            type="text"
+            name="code"
+            class="form-control"
+            id="id_code"
+            placeholder="Digite o código recebido"
+            required
+            style="letter-spacing: 3px; font-size:1.25rem; height:56px;"
+            maxlength="8"
+            autocomplete="off"
+          >
+        </div>
+      </div>
+      <div class="d-grid mb-2">
+        <button type="submit" class="btn btn-primary fw-semibold btn-lg" style="background:#0667b1; border:none; border-radius: 8px; font-size: 1.18rem; height:50px;">
+          <i class="bi bi-check2-circle me-2"></i>Verificar
+        </button>
+      </div>
+    </form>
+    <div class="text-center text-secondary mt-2" style="font-size:1rem;">
+      Não recebeu o código?
+      <a href="{% url 'resend_verification_code' %}" style="color:#f1a208; text-decoration: underline; font-weight: 600;">
+        Reenviar código
+      </a>
+    </div>
+  </div>
+</div>
+<!-- Bootstrap Icons CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 {% endblock %}

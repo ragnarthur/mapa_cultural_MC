@@ -9,6 +9,7 @@ class Agent(models.Model):
     education = models.CharField("Formação Cultural", max_length=200, blank=True, help_text="Ex: Bacharel em Música, Técnico em Teatro…")
     bio = models.TextField("Biografia / Descrição", blank=True, help_text="Conte aqui um breve histórico ou currículo resumido.")
     contact = models.CharField("Telefone / Contato", max_length=100, blank=True, help_text="Telefone, WhatsApp ou outra forma de contato.")
+    portfolio_pdf = models.FileField(upload_to='portfolios/', blank=True, null=True)
     approved = models.BooleanField(default=False)
     created_at = models.DateTimeField("Criado em", auto_now_add=True)
     updated_at = models.DateTimeField("Última atualização", auto_now=True)

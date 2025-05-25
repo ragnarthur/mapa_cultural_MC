@@ -2,29 +2,140 @@
 {% block title %}Registrar-se – Mapas Culturais{% endblock %}
 
 {% block content %}
-  <h2>Cadastro de Agente Cultural</h2>
-  <form method="post">{% csrf_token %}
-    {{ form.non_field_errors }}
-    <div>
-      {{ form.username.label_tag }}<br>
-      {{ form.username }}<br>{{ form.username.errors }}
+<div class="container py-5 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <!-- Card largo, campos em coluna única -->
+  <div class="card shadow-lg p-4" style="max-width: 600px; width: 100%; border-radius: 18px;">
+    <div class="text-center mb-3">
+      <h3 class="fw-bold mt-2 mb-1" style="color:#0667b1;">Cadastro de Agente Cultural</h3>
+      <span class="text-secondary" style="font-size: 1rem;">Crie sua conta para participar ativamente da cultura de Monte Carmelo</span>
     </div>
-    <div>
-      {{ form.name.label_tag }}<br>
-      {{ form.name }}<br>{{ form.name.errors }}
-    </div>
-    <div>
-      {{ form.email.label_tag }}<br>
-      {{ form.email }}<br>{{ form.email.errors }}
-    </div>
-    <div>
-      {{ form.password1.label_tag }}<br>
-      {{ form.password1 }}<br>{{ form.password1.errors }}
-    </div>
-    <div>
-      {{ form.password2.label_tag }}<br>
-      {{ form.password2 }}<br>{{ form.password2.errors }}
-    </div>
-    <button type="submit">Cadastrar</button>
-  </form>
+    <form method="post" autocomplete="off">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <!-- Usuário -->
+      <div class="mb-3">
+        <label for="id_username" class="form-label fw-semibold" style="color:#0667b1;">Usuário</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light" style="border-radius: 7px 0 0 7px;">
+            <i class="bi bi-person-fill" style="color: #f1a208;"></i>
+          </span>
+          <input
+            type="text"
+            name="username"
+            class="form-control"
+            id="id_username"
+            placeholder="Escolha um nome de usuário"
+            required
+            autocomplete="username"
+            value="{{ form.username.value|default_if_none:'' }}"
+          >
+        </div>
+        {% for error in form.username.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <!-- Nome Completo -->
+      <div class="mb-3">
+        <label for="id_name" class="form-label fw-semibold" style="color:#0667b1;">Nome Completo</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light" style="border-radius: 7px 0 0 7px;">
+            <i class="bi bi-person-vcard-fill" style="color: #f1a208;"></i>
+          </span>
+          <input
+            type="text"
+            name="name"
+            class="form-control"
+            id="id_name"
+            placeholder="Seu nome completo"
+            required
+            value="{{ form.name.value|default_if_none:'' }}"
+          >
+        </div>
+        {% for error in form.name.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <!-- E-mail -->
+      <div class="mb-3">
+        <label for="id_email" class="form-label fw-semibold" style="color:#0667b1;">E-mail</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light" style="border-radius: 7px 0 0 7px;">
+            <i class="bi bi-envelope-at-fill" style="color: #f1a208;"></i>
+          </span>
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            id="id_email"
+            placeholder="Seu e-mail"
+            required
+            autocomplete="email"
+            value="{{ form.email.value|default_if_none:'' }}"
+          >
+        </div>
+        {% for error in form.email.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <!-- Senha -->
+      <div class="mb-3">
+        <label for="id_password1" class="form-label fw-semibold" style="color:#0667b1;">Senha</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light" style="border-radius: 7px 0 0 7px;">
+            <i class="bi bi-lock-fill" style="color: #f1a208;"></i>
+          </span>
+          <input
+            type="password"
+            name="password1"
+            class="form-control"
+            id="id_password1"
+            placeholder="Crie uma senha"
+            required
+            autocomplete="new-password"
+          >
+        </div>
+        {% for error in form.password1.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <!-- Confirme a Senha -->
+      <div class="mb-4">
+        <label for="id_password2" class="form-label fw-semibold" style="color:#0667b1;">Confirme a Senha</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light" style="border-radius: 7px 0 0 7px;">
+            <i class="bi bi-lock-fill" style="color: #f1a208;"></i>
+          </span>
+          <input
+            type="password"
+            name="password2"
+            class="form-control"
+            id="id_password2"
+            placeholder="Repita sua senha"
+            required
+            autocomplete="new-password"
+          >
+        </div>
+        {% for error in form.password2.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="d-grid gap-2 mb-3">
+        <button type="submit" class="btn btn-primary fw-semibold" style="background:#0667b1; border:none; border-radius: 8px; font-size: 1.15rem;">
+          <i class="bi bi-person-plus-fill me-2"></i>Cadastrar
+        </button>
+      </div>
+      <div class="text-center">
+        <span>Já possui uma conta? <a href="{% url 'login' %}" style="color:#f1a208; text-decoration:underline;">Entrar</a></span>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Bootstrap Icons CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 {% endblock %}

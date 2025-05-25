@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
@@ -10,6 +10,8 @@ from rest_framework import viewsets, permissions
 from .serializers import AgentSerializer, SpaceSerializer, EventSerializer
 import random
 import json
+import os  # <-- adicionado para o acesso ao arquivo
+from django.http import FileResponse, Http404  # <-- adicionado
 
 def home(request):
     return render(request, 'core/home.html')
@@ -37,6 +39,30 @@ def send_verification_email(user, code):
         fail_silently=False,
     )
 
+def resend_verification_code(request):
+    if request.method == "POST" or request.method == "GET":
+        email = request.POST.get('email') or request.session.get('email_for_verification')
+        if not email:
+            messages.error(request, "Não foi possível identificar seu e-mail para reenviar o código.")
+            return redirect('signup')
+        user = User.objects.filter(email=email).order_by('-id').first()
+        if not user:
+            messages.error(request, "Usuário não encontrado para esse e-mail.")
+            return redirect('signup')
+
+        # Exclui códigos antigos deste usuário para evitar erro de unicidade
+        EmailVerification.objects.filter(user=user).delete()
+
+        # Gera novo código e envia novamente
+        code = generate_code()
+        EmailVerification.objects.create(user=user, code=code)
+        send_verification_email(user, code)
+        messages.success(request, "Um novo código de verificação foi enviado ao seu e-mail.")
+        request.session['email_for_verification'] = email  # Mantém o e-mail na sessão
+        return redirect('verify_email')
+    else:
+        return redirect('verify_email')
+     
 def signup(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -47,6 +73,8 @@ def signup(request):
             code = generate_code()
             EmailVerification.objects.create(user=user, code=code)
             send_verification_email(user, code)
+            # ----------- LINHA CRUCIAL: Salva e-mail na sessão -------------
+            request.session['email_for_verification'] = user.email
             messages.info(request, "Cadastro criado com sucesso! Enviamos um código de verificação para seu e-mail. Por favor, verifique sua caixa de entrada e a pasta de spam/lixo eletrônico para ativar sua conta.")
             return redirect('verify_email')
     else:
@@ -69,6 +97,29 @@ def verify_email(request):
             messages.error(request, "Código inválido, expirado ou já utilizado. Tente novamente.")
     return render(request, 'registration/verify_email.html')
 
+
+def superuser_required(view_func):
+    return user_passes_test(lambda u: u.is_superuser)(view_func)
+
+@login_required
+@superuser_required
+def agent_portfolio_list(request):
+    agents = Agent.objects.filter(portfolio_pdf__isnull=False).exclude(portfolio_pdf='')
+    return render(request, 'core/agent_portfolio_list.html', {'agents': agents})
+
+@login_required
+@superuser_required
+def agent_portfolio_download(request, pk):
+    agent = get_object_or_404(Agent, pk=pk)
+    if not agent.portfolio_pdf:
+        raise Http404("Portfólio não encontrado.")
+    file_path = agent.portfolio_pdf.path
+    if not os.path.exists(file_path):
+        raise Http404("Arquivo não encontrado.")
+    response = FileResponse(open(file_path, 'rb'), content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="{os.path.basename(file_path)}"'
+    return response
+
 # -------------- AGENTES --------------
 
 @login_required
@@ -77,14 +128,17 @@ def agent_create(request):
         return redirect('login')
     if hasattr(request.user, 'agent_profile'):
         return redirect('agent_update', pk=request.user.agent_profile.pk)
-    form = AgentForm(request.POST or None)
-    if form.is_valid():
-        agent = form.save(commit=False)
-        agent.user = request.user
-        agent.approved = False
-        agent.save()
-        messages.success(request, "Perfil criado com sucesso! Aguarde aprovação da Secretaria.")
-        return render(request, 'core/agent_awaiting_approval.html')
+    if request.method == "POST":
+        form = AgentForm(request.POST, request.FILES)
+        if form.is_valid():
+            agent = form.save(commit=False)
+            agent.user = request.user
+            agent.approved = False
+            agent.save()
+            messages.success(request, "Perfil criado com sucesso! Aguarde aprovação da Secretaria.")
+            return render(request, 'core/agent_awaiting_approval.html')
+    else:
+        form = AgentForm()
     return render(request, 'core/agent_form.html', {'form': form, 'action': 'Criar'})
 
 @login_required
@@ -92,15 +146,18 @@ def agent_update(request, pk):
     agent = get_object_or_404(Agent, pk=pk)
     if not (request.user.is_superuser or request.user == agent.user):
         return redirect('home')
-    form = AgentForm(request.POST or None, instance=agent)
-    if form.is_valid():
-        agent = form.save(commit=False)
-        agent.approved = False
-        agent.save()
-        if request.user.is_superuser or request.user.has_perm('core.view_agent'):
-            return redirect('agent_pending_list')
-        else:
-            return render(request, 'core/agent_awaiting_approval.html')
+    if request.method == "POST":
+        form = AgentForm(request.POST, request.FILES, instance=agent)
+        if form.is_valid():
+            agent = form.save(commit=False)
+            agent.approved = False
+            agent.save()
+            if request.user.is_superuser or request.user.has_perm('core.view_agent'):
+                return redirect('agent_pending_list')
+            else:
+                return render(request, 'core/agent_awaiting_approval.html')
+    else:
+        form = AgentForm(instance=agent)
     return render(request, 'core/agent_form.html', {'form': form, 'action': 'Editar'})
 
 @login_required
@@ -131,6 +188,26 @@ def agent_approve(request, pk):
     agent.approved = True
     agent.save()
     return redirect('agent_pending_list')
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser or u.has_perm('core.view_agent'))
+def agent_portfolio_list(request):
+    agents = Agent.objects.filter(portfolio_pdf__isnull=False).exclude(portfolio_pdf='')
+    return render(request, 'core/agent_portfolio_list.html', {'agents': agents})
+
+# NOVO: VIEW PARA VISUALIZAÇÃO/DOWNLOAD DO PDF DO PORTFÓLIO
+@login_required
+@user_passes_test(lambda u: u.is_superuser or u.has_perm('core.view_agent'))
+def agent_portfolio_download(request, pk):
+    agent = get_object_or_404(Agent, pk=pk)
+    if not agent.portfolio_pdf:
+        raise Http404("Portfólio não encontrado.")
+    file_path = agent.portfolio_pdf.path
+    if not os.path.exists(file_path):
+        raise Http404("Arquivo não encontrado.")
+    response = FileResponse(open(file_path, 'rb'), content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="{os.path.basename(file_path)}"'
+    return response
 
 # -------------- ESPAÇOS / EVENTOS --------------
 @login_required

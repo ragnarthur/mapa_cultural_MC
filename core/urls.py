@@ -1,4 +1,7 @@
 ﻿from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
 from django.contrib import admin
 from . import views
 
@@ -6,6 +9,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('signup/', views.signup, name='signup'),
     path('verify_email/', views.verify_email, name='verify_email'),
+    path('resend_verification_code/', views.resend_verification_code, name='resend_verification_code'),
 
     # Agentes
     path('agents/', views.agent_list, name='agent_list'),
@@ -31,7 +35,12 @@ urlpatterns = [
     path('events/<int:pk>/aprovar/', views.event_approve, name='event_approve'),
     path('events/pendentes/', views.event_pending_list, name='event_pending_list'),
 
+    # Portfólios (ACESSO SÓ PARA SUPERUSUÁRIO)
+    path('secretaria/portfolios/', views.agent_portfolio_list, name='agent_portfolio_list'),
+    path('secretaria/portfolio/<int:pk>/', views.agent_portfolio_download, name='agent_portfolio_download'),
 
     path('admin/', admin.site.urls),
     path('api/', include('core.api_urls')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

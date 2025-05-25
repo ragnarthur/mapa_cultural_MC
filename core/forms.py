@@ -34,6 +34,7 @@ class AgentForm(forms.ModelForm):
             'name', 'email',
             'area_of_activity', 'education',
             'bio', 'contact',
+            'portfolio_pdf',
         ]
         widgets = {
             'name':             forms.TextInput(attrs={'class': 'form-control'}),
@@ -42,7 +43,15 @@ class AgentForm(forms.ModelForm):
             'education':        forms.TextInput(attrs={'class': 'form-control'}),
             'bio':              forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'contact':          forms.TextInput(attrs={'id': 'contact', 'class': 'form-control', 'placeholder': '(XX)XXXXX-XXXX'}),
+            'portfolio_pdf':    forms.ClearableFileInput(attrs={'accept': '.pdf'}),
         }
+
+        # Validação: aceita apenas PDF (opcional, mas recomendado)
+    def clean_portfolio_pdf(self):
+        pdf = self.cleaned_data.get('portfolio_pdf')
+        if pdf and not pdf.name.lower().endswith('.pdf'):
+            raise forms.ValidationError("Envie apenas arquivos em PDF.")
+        return pdf
 
 class SpaceForm(forms.ModelForm):
     class Meta:

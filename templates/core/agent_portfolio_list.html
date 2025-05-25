@@ -1,0 +1,44 @@
+﻿{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Portfólios dos Agentes{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-4 fw-bold" style="color:#0667b1;">Portfólios dos Agentes Culturais</h2>
+  {% if agents %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped align-middle bg-white rounded shadow-sm">
+        <thead class="table-light">
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Área de Atuação</th>
+            <th>Portfólio PDF</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for agent in agents %}
+          <tr>
+            <td>{{ agent.name }}</td>
+            <td>{{ agent.email }}</td>
+            <td>{{ agent.area_of_activity }}</td>
+            <td class="text-center">
+              {% if agent.portfolio_pdf %}
+                <a href="{% url 'agent_portfolio_download' agent.pk %}" target="_blank" class="btn btn-sm btn-outline-primary">
+                  Visualizar PDF
+                </a>
+              {% else %}
+                <span class="text-muted">Sem arquivo</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-warning mt-3">Nenhum portfólio enviado ainda.</div>
+  {% endif %}
+</div>
+{% endblock %}
