@@ -1,4 +1,3 @@
-# mapas_culturais/urls.py
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
@@ -16,9 +15,9 @@ urlpatterns = [
     path('api/', include('core.api_urls')),
 ]
 
-# só adiciona esta parte em DEV, para servir os estáticos quando DEBUG=False
+# Só adiciona essas rotas em desenvolvimento (DEBUG=True)
 if settings.DEBUG:
-    urlpatterns += static(
-        settings.STATIC_URL,
-        document_root=settings.STATICFILES_DIRS[0]  # ou settings.STATIC_ROOT, se você rodar collectstatic
-    )
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+    # Se você usa collectstatic em produção, troque STATICFILES_DIRS[0] por STATIC_ROOT
+

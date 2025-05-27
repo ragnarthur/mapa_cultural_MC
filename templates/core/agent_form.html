@@ -42,6 +42,21 @@
         {{ form.name.errors }}
       </div>
 
+      <!-- Campo de foto do agente -->
+      <div class="mb-3">
+        <label for="id_photo" class="form-label fw-semibold" style="color:#0667b1; font-size:1.14rem;">
+          Foto do agente <span class="text-secondary" style="font-weight:400;">(opcional, JPG/PNG, até 4MB)</span>
+        </label>
+        <input type="file" name="photo" class="form-control" id="id_photo" accept="image/*">
+        {{ form.photo.errors }}
+        {% if form.instance.photo %}
+          <div class="mt-2">
+            <span class="text-secondary" style="font-size:0.97rem;">Foto atual:</span><br>
+            <img src="{{ form.instance.photo.url }}" alt="Foto do agente" class="rounded-circle" style="width:80px;height:80px;object-fit:cover;border:2px solid #eee;">
+          </div>
+        {% endif %}
+      </div>
+
       <div class="mb-3">
         <label for="id_email" class="form-label fw-semibold" style="color:#0667b1; font-size:1.14rem;">E-mail</label>
         <div class="input-group input-group-lg">

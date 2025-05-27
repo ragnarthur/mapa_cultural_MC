@@ -1,18 +1,49 @@
 ﻿{% extends 'core/base.html' %}
+{% load static %}
+
 {% block title %}Agentes – Mapas Culturais{% endblock %}
 
 {% block content %}
-  <h2>Lista de Agentes</h2>
-  <p><a href="{% url 'agent_create' %}">+ Adicionar Agente</a></p>
-  <ul>
-    {% for a in agents %}
-      <li>
-        {{ a.name }}{% if a.email %} – {{ a.email }}{% endif %} —
-        <a href="{% url 'agent_update' a.pk %}">Editar</a> |
-        <a href="{% url 'agent_delete' a.pk %}">Excluir</a>
-      </li>
-    {% empty %}
-      <li>Nenhum agente cadastrado.</li>
-    {% endfor %}
-  </ul>
+<div class="container py-4" style="max-width:900px;">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0" style="color:#0667b1; font-size:2rem;">Agentes Culturais</h2>
+    <a class="btn btn-success fw-semibold" style="font-size:1.11rem; border-radius: 10px;" href="{% url 'agent_create' %}">
+      + Adicionar Agente
+    </a>
+  </div>
+  {% if agents %}
+    <ul class="list-group list-group-flush">
+      {% for a in agents|dictsort:"name" %}
+        <li class="list-group-item px-0 py-3 d-flex align-items-center" style="background:transparent;">
+          {% if a.photo %}
+            <img src="{{ a.photo.url }}" alt="Foto de {{ a.name }}"
+                 class="rounded-circle me-3"
+                 style="width:62px;height:62px;object-fit:cover;box-shadow:0 1px 4px rgba(0,0,0,.10);border:2px solid #eee;">
+          {% else %}
+            <img src="{% static 'img/user-placeholder.png' %}" alt="Sem foto"
+                 class="rounded-circle me-3"
+                 style="width:62px;height:62px;object-fit:cover;box-shadow:0 1px 4px rgba(0,0,0,.10);border:2px solid #eee;">
+          {% endif %}
+
+          <div class="flex-grow-1">
+            <span class="fw-bold" style="color:#0667b1;font-size:1.13rem;">{{ a.name }}</span>
+            <div class="text-secondary" style="font-size:1.05rem;line-height:1.32;">
+              {{ a.bio|default:"Sem mini currículo."|linebreaksbr|truncatechars:140 }}
+            </div>
+            {% if a.email %}
+              <span class="text-muted" style="font-size:0.95rem;">
+                <i class="bi bi-envelope"></i> {{ a.email }}
+              </span>
+            {% endif %}
+          </div>
+          {# Botão de editar removido #}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="text-center text-muted py-5">
+      Nenhum agente cadastrado.
+    </div>
+  {% endif %}
+</div>
 {% endblock %}
