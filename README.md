@@ -1,4 +1,4 @@
-# 🌎 Mapas Culturais – Monte Carmelo
+# 🌎 Cadastro Cultural – Monte Carmelo
 
 Sistema de mapeamento e gestão de agentes, espaços e eventos culturais desenvolvido para a Secretaria de Cultura de Monte Carmelo – MG.
 
